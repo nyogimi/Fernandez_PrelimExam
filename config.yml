@@ -1,0 +1,39 @@
+---
+- hosts: all
+  module_defaults:
+    ansible.builtin.file:
+      pip: python3-pip
+      python: python3
+  become: true
+  tasks:
+
+  - name: Installing latest phyton3, pip3, and java open-jdk (Ubuntu)
+    apt:
+      name:
+        - python3
+        - python3-pip
+        - default-jdk
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Installing latest phyton3, pip3, and java open-jdk (CentOS)
+    yum:
+      name: 
+        - python3 
+        - python3-pip 
+        - java-11-openjdk-devel
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "CentOS" 
+
+  - name: Creating a User
+    ansible.builtin.user:
+          name: rhenz
+          uid: 1204
+          group: root
+          home: /home/rhenz
+
+  - name: Creating motd
+    debug:
+        msg: config.yml
